@@ -42,6 +42,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AddEmployeeDialog } from "@/components/dialogs/AddEmployeeDialog";
+import { toast } from "@/components/ui/use-toast";
 
 interface Employee {
   id: string;
@@ -54,6 +56,9 @@ interface Employee {
   avatar?: string;
   joinDate: string;
   salary: number;
+  address?: string;
+  dateOfBirth?: string;
+  gender?: string;
 }
 
 const mockEmployees: Employee[] = [
@@ -115,10 +120,11 @@ const mockEmployees: Employee[] = [
 ];
 
 export default function EmployeeManagement() {
-  const [employees] = useState<Employee[]>(mockEmployees);
+  const [employees, setEmployees] = useState<Employee[]>(mockEmployees);
   const [searchTerm, setSearchTerm] = useState("");
   const [departmentFilter, setDepartmentFilter] = useState("all");
   const [statusFilter, setStatusFilter] = useState("all");
+  const [showAddDialog, setShowAddDialog] = useState(false);
 
   const filteredEmployees = employees.filter((employee) => {
     const matchesSearch =
@@ -137,6 +143,22 @@ export default function EmployeeManagement() {
 
   const departments = [...new Set(employees.map((emp) => emp.department))];
 
+  const handleAddEmployee = (
+    employeeData: Omit<Employee, "id" | "joinDate">,
+  ) => {
+    const newEmployee: Employee = {
+      ...employeeData,
+      id: Math.random().toString(36).substr(2, 9),
+      joinDate: new Date().toISOString().split("T")[0],
+    };
+
+    setEmployees((prev) => [...prev, newEmployee]);
+    toast({
+      title: "Employee Added",
+      description: `${employeeData.name} has been successfully added to the system.`,
+    });
+  };
+
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -149,7 +171,7 @@ export default function EmployeeManagement() {
             Manage employee records, profiles, and information
           </p>
         </div>
-        <Button className="gap-2">
+        <Button className="gap-2" onClick={() => setShowAddDialog(true)}>
           <Plus className="w-4 h-4" />
           Add Employee
         </Button>
@@ -380,6 +402,12 @@ export default function EmployeeManagement() {
           )}
         </CardContent>
       </Card>
+
+      <AddEmployeeDialog
+        open={showAddDialog}
+        onOpenChange={setShowAddDialog}
+        onAddEmployee={handleAddEmployee}
+      />
     </div>
   );
 }
