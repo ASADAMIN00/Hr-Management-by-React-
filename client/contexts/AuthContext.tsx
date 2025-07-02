@@ -43,18 +43,22 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const login = async (email: string, password: string) => {
     setLoading(true);
     try {
-      // TODO: Replace with actual API call
-      const mockUser: User = {
-        id: "1",
-        name: "John Admin",
-        email: email,
-        role: "admin",
-        companyId: "company-1",
-        avatar: "/placeholder.svg",
-      };
+      // Simple credential validation
+      if (email === "asad47952@gmail.com" && password === "123456") {
+        const mockUser: User = {
+          id: "1",
+          name: "Asad Amin",
+          email: email,
+          role: "admin",
+          companyId: "company-1",
+          avatar: "/placeholder.svg",
+        };
 
-      setUser(mockUser);
-      localStorage.setItem("hrms_user", JSON.stringify(mockUser));
+        setUser(mockUser);
+        localStorage.setItem("hrms_user", JSON.stringify(mockUser));
+      } else {
+        throw new Error("Invalid credentials");
+      }
     } catch (error) {
       throw new Error("Login failed");
     } finally {

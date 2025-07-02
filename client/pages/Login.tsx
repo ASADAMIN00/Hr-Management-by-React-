@@ -163,7 +163,7 @@ export default function Login() {
 
               <div className="mt-6 text-center">
                 <p className="text-sm text-muted-foreground">
-                  Demo credentials: admin@company.com / password
+                  Demo credentials: asad47952@gmail.com / 123456
                 </p>
               </div>
             </CardContent>
